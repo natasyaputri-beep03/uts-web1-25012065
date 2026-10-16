@@ -19,6 +19,29 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
+// Hapus satu item
+if (isset($_POST["hapus"])) {
+    $kodeHapus = $_POST["hapus"];
+
+    if (isset($_SESSION["keranjang"][$kodeHapus])) {
+        unset($_SESSION["keranjang"][$kodeHapus]);
+        $_SESSION["pesan"] = "Item berhasil dihapus.";
+    }
+
+    header("Location: keranjang.php");
+    exit;
+}
+
+// Kosongkan keranjang
+if (isset($_POST["kosongkan"])) {
+    $_SESSION["keranjang"] = [];
+    $_SESSION["pesan"] = "Keranjang berhasil dikosongkan.";
+
+    header("Location: keranjang.php");
+    exit;
+}
+
+// Validasi pemesanan
 $kode = $_POST["kode"] ?? "";
 $jumlahInput = $_POST["jumlah"] ?? "";
 $jumlah = filter_var($jumlahInput, FILTER_VALIDATE_INT);

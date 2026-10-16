@@ -1,4 +1,4 @@
-```php
+
 <?php
 session_start();
 
@@ -16,6 +16,30 @@ if (!isset($_SESSION["keranjang"])) {
 }
 
 $keyword = $_GET["cari"] ?? "";
+$kategoriValid = ["Semua", "Makanan", "Minuman"];
+
+if (isset($_GET["kategori"])) {
+    $pilihan = $_GET["kategori"];
+
+    if (in_array($pilihan, $kategoriValid, true)) {
+        $kategori = $pilihan;
+
+        setcookie(
+            "kategori_favorit",
+            $kategori,
+            time() + (7 * 24 * 60 * 60),
+            "/"
+        );
+    } else {
+        $kategori = "Semua";
+    }
+} else {
+    $kategori = $_COOKIE["kategori_favorit"] ?? "Semua";
+
+    if (!in_array($kategori, $kategoriValid, true)) {
+        $kategori = "Semua";
+    }
+}
 
 function rupiah($angka) {
     return "Rp" . number_format($angka, 0, ",", ".");
@@ -101,23 +125,37 @@ footer{text-align:center;padding:25px;color:#688579}
     <?php endif; ?>
 
     <div class="toolbar">
-        <form method="GET">
-            <input type="text" name="cari"
-                placeholder="Cari nama menu..."
-                value="<?= htmlspecialchars($keyword, ENT_QUOTES, "UTF-8") ?>">
-            <button type="submit">🔍 Cari</button>
-        </form>
+<form method="GET">
+    <input
+        type="text"
+        name="cari"
+        placeholder="Cari nama menu..."
+        value="<?= htmlspecialchars($keyword, ENT_QUOTES, "UTF-8") ?>"
+    >
+
+    <select name="kategori">
+        <option value="Semua" <?= $kategori === "Semua" ? "selected" : "" ?>>Semua Kategori</option>
+        <option value="Makanan" <?= $kategori === "Makanan" ? "selected" : "" ?>>Makanan</option>
+        <option value="Minuman" <?= $kategori === "Minuman" ? "selected" : "" ?>>Minuman</option>
+    </select>
+
+    <button type="submit">Cari</button>
+</form>
+
         <a class="link" href="keranjang.php">🛒 Lihat Keranjang</a>
     </div>
 
     <h2>Menu Pilihan 🍽️</h2>
     <div class="grid">
     <?php
-    $ditemukan = false;
-    foreach ($menu as $item):
-        if (stripos($item["nama"], $keyword) !== false):
-            $ditemukan = true;
-    ?>
+$ditemukan = false;
+foreach ($menu as $item):
+    if (
+        stripos($item["nama"], $keyword) !== false &&
+        ($kategori === "Semua" || $item["kategori"] === $kategori)
+    ):
+        $ditemukan = true;
+?>
         <div class="card">
             <div class="icon">🍱</div>
             <span class="category">

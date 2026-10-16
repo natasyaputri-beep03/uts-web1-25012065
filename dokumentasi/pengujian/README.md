@@ -23,3 +23,13 @@ Dokumentasi ini berisi skenario pengujian aplikasi pemesanan makanan dan minuman
 Simpan screenshot setiap pengujian pada folder ini setelah pengujian dilakukan.
 
 Catatan: Kolom hasil aktual dan status harus diperbarui sesuai hasil pengujian sebenarnya.
+
+## Cara Menjalankan Pengujian
+
+1. Jalankan server PHP lokal.
+2. Buka aplikasi Kantin Kampus melalui browser.
+3. Uji pencarian menu dan pemesanan.
+4. Periksa validasi jumlah pesanan.
+5. Periksa isi keranjang dan perhitungan diskon.
+6. Uji fitur hapus item dan kosongkan keranjang.
+7. Ambil screenshot hasil pengujian dan simpan di folder ini.
